@@ -353,13 +353,23 @@ DROP SEQUENCE secuencia_auditoria;
                     v_paisorigen_jugador VARCHAR2(20);
                     v_fechanac DATE;
                     v_posicion VARCHAR2(3);
+                CURSOR portero IS
+                    SELECT DISTINCT j.nombre_jugador, j.paisorigen_jugador, j.fechanac, j.posicion FROM jugador j, club c WHERE j.equipo_jugador = nombre AND j.posicion IN ('POR') ;
                 CURSOR mediocampo IS
                     SELECT DISTINCT j.nombre_jugador, j.paisorigen_jugador, j.fechanac, j.posicion FROM jugador j, club c WHERE j.equipo_jugador = nombre AND j.posicion IN ('MI', 'MC', 'MCO', 'MD', 'MCD') ;
                 CURSOR delantera IS
                     SELECT DISTINCT j.nombre_jugador, j.paisorigen_jugador, j.fechanac, j.posicion FROM jugador j, club c WHERE j.equipo_jugador = nombre AND j.posicion IN ('EI', 'SC', 'DC', 'ED') ;
             BEGIN
+                OPEN portero;
+                        DBMS_OUTPUT.PUT_LINE('--------------------------Portero--------------------------');
+                        LOOP
+                         FETCH portero INTO v_nombre_jugador, v_paisorigen_jugador, v_fechanac, v_posicion;
+                         EXIT WHEN portero%NOTFOUND;
+                         DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_nombre_jugador ||' || Nacionalidad: '|| v_paisorigen_jugador  ||'|| Fecha Nacimiento: '||  v_fechanac  ||' || Posición: '||  v_posicion);
+                        END LOOP;
+                CLOSE portero;
                 OPEN defensa;
-                        
+                        DBMS_OUTPUT.PUT_LINE('--------------------------------------------------------------');
                         DBMS_OUTPUT.PUT_LINE('---------------------------Defensa---------------------------');
                         LOOP
                          FETCH defensa INTO v_nombre_jugador, v_paisorigen_jugador, v_fechanac, v_posicion;
